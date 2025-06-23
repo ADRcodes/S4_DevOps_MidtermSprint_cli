@@ -17,6 +17,23 @@ public class Event {
     private User organizer;
     private Venue venue;
 
+    // ─── Constructors ──────────────────────────────────────────────────────────
+    public Event() {
+        // Default constructor
+    }
+
+    public Event(Long id, String company, String title, LocalDateTime date, String description, BigDecimal price, int capacity, User organizer, Venue venue) {
+        this.id = id;
+        this.company = company;
+        this.title = title;
+        this.date = date;
+        this.description = description;
+        this.price = price;
+        this.capacity = capacity;
+        this.organizer = organizer;
+        this.venue = venue;
+    }
+
     // ─── Getters & Setters ────────────────────────────────────────────────────
 
     public Long getId() {
