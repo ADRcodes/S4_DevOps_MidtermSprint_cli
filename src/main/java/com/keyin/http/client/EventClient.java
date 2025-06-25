@@ -54,6 +54,7 @@ public class EventClient {
         HttpResponse<String> resp = client.send(req, HttpResponse.BodyHandlers.ofString());
         if (resp.statusCode() != 200) {
             throw new RuntimeException("Failed to fetch events by venue: HTTP " + resp.statusCode());
+
         }
         return mapper.readValue(resp.body(), new TypeReference<List<Event>>() {});
     }
