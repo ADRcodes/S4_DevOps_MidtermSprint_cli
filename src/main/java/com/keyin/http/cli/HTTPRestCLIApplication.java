@@ -20,7 +20,7 @@ public class HTTPRestCLIApplication {
     public static void main(String[] args) {
         HTTPRestCLIApplication app = new HTTPRestCLIApplication();
 
-        String serverURL = args.length > 0 ? args[0] : "http://localhost:8080/api";
+        String serverURL = args.length > 0 ? args[0] : "http://localhost:8080";
         app.initializeClients(serverURL);
 
         // For testing: call the functions here

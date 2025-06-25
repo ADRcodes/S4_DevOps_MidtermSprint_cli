@@ -2,6 +2,8 @@ package com.keyin.http.client;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.keyin.domain.Event;
 
@@ -38,7 +40,8 @@ public class EventClient {
 
             if (response.statusCode() == 200) {
                 ObjectMapper mapper = new ObjectMapper();
-                mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+                mapper.registerModule(new JavaTimeModule());
+                mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
                 events = mapper.readValue(response.body(), new TypeReference<List<Event>>() {});
             } else {
