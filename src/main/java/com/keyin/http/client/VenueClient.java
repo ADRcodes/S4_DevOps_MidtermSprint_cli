@@ -51,4 +51,16 @@ public class VenueClient {
 
         return venues;
     }
+
+    public List<Venue> buildVenueListFromResponse(String jsonResponse) {
+        List<Venue> venues = new ArrayList<>();
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+            venues = mapper.readValue(jsonResponse, new TypeReference<List<Venue>>() {});
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return venues;
+    }
 }

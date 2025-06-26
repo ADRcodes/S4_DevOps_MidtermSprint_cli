@@ -56,4 +56,20 @@ public class Venue {
         this.capacity = capacity;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Venue venue = (Venue) obj;
+        return id == venue.id &&
+                capacity == venue.capacity &&
+                Objects.equals(name, venue.name) &&
+                Objects.equals(address, venue.address);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, address, capacity);
+    }
+
 }
