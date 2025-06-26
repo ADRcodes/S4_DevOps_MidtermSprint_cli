@@ -31,6 +31,13 @@ public class EventClient {
                 .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
     }
 
+    // package-private, only for tests
+    EventClient(String serverUrl, HttpClient client, ObjectMapper mapper) {
+        this.baseUrl = serverUrl + "/api/events";
+        this.client = client;
+        this.mapper = mapper;
+    }
+
     /** GET all events */
     public List<Event> getAllEvents() throws IOException, InterruptedException {
         HttpRequest req = HttpRequest.newBuilder()
