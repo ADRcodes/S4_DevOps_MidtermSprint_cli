@@ -15,15 +15,19 @@ public class UserClient {
     private final ObjectMapper mapper;
 
     public UserClient(String serverUrl) {
-        // ensure it ends with "/api/users"
-        if (serverUrl.endsWith("/")) {
-            this.baseUrl = serverUrl + "api/users";
-        } else {
-            this.baseUrl = serverUrl + "/api/users";
-        }
+        this.baseUrl = serverUrl + "/api/users";
         this.client = HttpClient.newHttpClient();
         this.mapper = new ObjectMapper()
                 .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+    }
+
+    // Package-private for testing
+    UserClient(String serverUrl, HttpClient client, ObjectMapper mapper) {
+        this.baseUrl = serverUrl.endsWith("/")
+                ? serverUrl + "api/users"
+                : serverUrl + "/api/users";
+        this.client  = client;
+        this.mapper  = mapper;
     }
 
     /** GET all users */
