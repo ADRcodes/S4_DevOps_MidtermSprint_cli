@@ -1,47 +1,116 @@
 package com.keyin.http.client;
 
 import com.keyin.domain.Venue;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import com.fasterxml.jackson.databind.*;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+
+import org.mockito.*;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.io.IOException;
+import java.net.http.*;
 import java.util.List;
 
-public class VenueClientTest {
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
-    @Test
-    public void testGetAllVenues() throws Exception {
-        String jsonResponse = "[\n{\n\"id\": 1,\n\"name\": \"Convention Center\",\n\"address\": \"123 Main St\",\n\"capacity\": 500\n},\n" +
-                "{\n\"id\": 2,\n\"name\": \"Community Hall\",\n\"address\": \"456 Oak Ave\",\n\"capacity\": 200\n}\n]";
+@ExtendWith(MockitoExtension.class)
+class VenueClientTest {
+    @Mock HttpClient httpClient;
+    @Mock HttpResponse<String> httpResponse;
 
-        VenueClient venueClientUnderTest = new VenueClient();
+    private VenueClient venueClient;
 
-        List<Venue> venueList = venueClientUnderTest.buildVenueListFromResponse(jsonResponse);
+    @BeforeEach
+    void setup() {
+        ObjectMapper mapper = new ObjectMapper()
+                .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 
-        Assertions.assertEquals(2, venueList.size());
-        Assertions.assertTrue(venueList.contains(new Venue(1, "Convention Center", "123 Main St", 500)));
-        Assertions.assertTrue(venueList.contains(new Venue(2, "Community Hall", "456 Oak Ave", 200)));
-    }
-
-
-    @Test
-    public void testGetAllVenuesEmptyList() throws Exception {
-        String jsonResponse = "[]";
-
-        VenueClient venueClientUnderTest = new VenueClient();
-        List<Venue> venueList = venueClientUnderTest.buildVenueListFromResponse(jsonResponse);
-
-        Assertions.assertEquals(0, venueList.size());
-        Assertions.assertTrue(venueList.isEmpty());
+        venueClient = new VenueClient("http://localhost:8080", httpClient, mapper);
     }
 
     @Test
-    public void testGetAllVenuesSingleVenue() throws Exception {
-        String jsonResponse = "[\n{\n\"id\": 3,\n\"name\": \"Theater Hall\",\n\"address\": \"789 Park Ave\",\n\"capacity\": 150\n}\n]";
+    void getAllVenues_parsesList() throws IOException, InterruptedException {
+        String fakeJson = """
+            [
+              {
+                "id": 1,
+                "name": "Convention Center",
+                "address": "123 Main St",
+                "capacity": 500
+              },
+              {
+                "id": 2,
+                "name": "Community Hall",
+                "address": "456 Oak Ave",
+                "capacity": 200
+              }
+            ]
+            """;
 
-        VenueClient venueClientUnderTest = new VenueClient();
-        List<Venue> venueList = venueClientUnderTest.buildVenueListFromResponse(jsonResponse);
+        when(httpResponse.statusCode()).thenReturn(200);
+        when(httpResponse.body()).thenReturn(fakeJson);
+        when(httpClient.send(
+                any(HttpRequest.class),
+                any(HttpResponse.BodyHandler.class))
+        ).thenReturn(httpResponse);
 
-        Assertions.assertEquals(1, venueList.size());
-        Assertions.assertTrue(venueList.contains(new Venue(3, "Theater Hall", "789 Park Ave", 150)));
+        List<Venue> venues = venueClient.getAllVenues();
+
+        assertEquals(2, venues.size(), "Should parse two venues");
+        Venue v1 = venues.get(0);
+        assertEquals(1L, v1.getId());
+        assertEquals("Convention Center", v1.getName());
+        assertEquals("123 Main St", v1.getAddress());
+        assertEquals(500, v1.getCapacity());
+
+        verify(httpClient, times(1))
+                .send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class));
+    }
+
+    @Test
+    void getAllVenues_emptyList() throws Exception {
+        String fakeJson = "[]";
+
+        when(httpResponse.statusCode()).thenReturn(200);
+        when(httpResponse.body()).thenReturn(fakeJson);
+        when(httpClient.send(
+                any(HttpRequest.class),
+                any(HttpResponse.BodyHandler.class)))
+                .thenReturn(httpResponse);
+
+        List<Venue> venues = venueClient.getAllVenues();
+
+        assertEquals(0, venues.size());
+        assertTrue(venues.isEmpty());
+    }
+
+    @Test
+    void getAllVenues_singleVenue() throws Exception {
+        String fakeJson = """
+            [
+              {
+                "id": 3,
+                "name": "Theater Hall",
+                "address": "789 Park Ave",
+                "capacity": 150
+              }
+            ]
+            """;
+
+        when(httpResponse.statusCode()).thenReturn(200);
+        when(httpResponse.body()).thenReturn(fakeJson);
+        when(httpClient.send(
+                any(HttpRequest.class),
+                any(HttpResponse.BodyHandler.class)))
+                .thenReturn(httpResponse);
+
+        List<Venue> venues = venueClient.getAllVenues();
+
+        assertEquals(1, venues.size());
+        assertEquals("Theater Hall", venues.get(0).getName());
     }
 }
