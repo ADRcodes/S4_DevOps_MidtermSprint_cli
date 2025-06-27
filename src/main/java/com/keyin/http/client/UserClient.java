@@ -30,7 +30,6 @@ public class UserClient {
         this.mapper  = mapper;
     }
 
-    /** GET all users */
     public List<User> getAllUsers() throws IOException, InterruptedException {
         HttpRequest req = HttpRequest.newBuilder()
                 .uri(URI.create(baseUrl))
@@ -44,7 +43,6 @@ public class UserClient {
         return mapper.readValue(resp.body(), new TypeReference<List<User>>() {});
     }
 
-    /** GET one user by ID */
     public User getUserById(Long id) throws IOException, InterruptedException {
         String url = baseUrl + "/" + id;
         HttpRequest req = HttpRequest.newBuilder()

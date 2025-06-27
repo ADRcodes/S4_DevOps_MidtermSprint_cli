@@ -46,7 +46,6 @@ public class VenueClient {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() == 200) {
-                // Use the instance mapper instead of creating a new one
                 venues = mapper.readValue(response.body(), new TypeReference<List<Venue>>() {});
             } else {
                 System.out.println("Failed to get venues. Status code: " + response.statusCode());
@@ -62,7 +61,6 @@ public class VenueClient {
     public List<Venue> buildVenueListFromResponse(String jsonResponse) {
         List<Venue> venues = new ArrayList<>();
         try {
-            // Use the instance mapper instead of creating a new one
             venues = mapper.readValue(jsonResponse, new TypeReference<List<Venue>>() {});
         } catch (Exception e) {
             e.printStackTrace();
