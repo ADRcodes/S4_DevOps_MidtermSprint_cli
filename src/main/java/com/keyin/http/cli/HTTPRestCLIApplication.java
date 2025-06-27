@@ -20,6 +20,7 @@ public class HTTPRestCLIApplication {
 
         UserClient userClient   = new UserClient(serverURLBase);
         EventClient eventClient = new EventClient(serverURLBase);
+        VenueClient venueClient = new VenueClient(serverURLBase);
         RegistrationClient registrationClient = new RegistrationClient();
         registrationClient.setServerURL(serverURLBase);
 
@@ -33,6 +34,9 @@ public class HTTPRestCLIApplication {
             System.out.println("2. What events is a particular attendee registered for?");
             System.out.println("3. What events are being held at each venue?");
             System.out.println("4. Who has registered for each event?");
+            System.out.println("5. Show all users");
+            System.out.println("6. Show all events");
+            System.out.println("7. Show all venues");
             System.out.println("0. Exit");
             System.out.print("Enter choice: ");
             choice = scanner.nextInt();
@@ -46,6 +50,9 @@ public class HTTPRestCLIApplication {
                 }
                 case 3 -> listEventsByVenue(eventClient);
                 case 4 -> listUsersByEvent(registrationClient, eventClient);
+                case 5 -> fetchAndPrintAllUsers(userClient);
+                case 6 -> fetchAndPrintAllEvents(eventClient);
+                case 7 -> fetchAndPrintAllVenues(venueClient);
                 case 0 -> System.out.println(" Goodbye!");
                 default -> System.out.println(" Invalid choice.");
             }
@@ -193,6 +200,22 @@ public class HTTPRestCLIApplication {
 
 
     // ─────── Venue Flows ─────────
+    private static void fetchAndPrintAllVenues(VenueClient venueClient) {
+        try {
+            List<Venue> venues = venueClient.getAllVenues();
+            System.out.println("\nFetched " + venues.size() + " venues:");
+            for (Venue v : venues) {
+                System.out.printf("• [%d] %s (%s) - capacity: %d%n",
+                        v.getId(),
+                        v.getName(),
+                        v.getAddress(),
+                        v.getCapacity());
+            }
+        } catch (Exception e) {
+            System.err.println("❌ Error fetching venues: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
 
 
 
