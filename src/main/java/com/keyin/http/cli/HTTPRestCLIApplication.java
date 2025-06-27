@@ -30,7 +30,7 @@ public class HTTPRestCLIApplication {
 
         do {
             System.out.println("\n=== Event Management CLI ===");
-            System.out.println("1. What events are happening in the next 7 days?");
+            System.out.println("1. What events are happening in the next 30 days?");
             System.out.println("2. What events is a particular attendee registered for?");
             System.out.println("3. What events are being held at each venue?");
             System.out.println("4. Who has registered for each event?");
@@ -68,9 +68,9 @@ public class HTTPRestCLIApplication {
     private static void listUpcomingEvents(EventClient eventClient) {
         try {
             List<Event> events = eventClient.getAllEvents();
-            System.out.println("\n=== Events Happening in Next 7 Days ===");
+            System.out.println("\n=== Events Happening in the next 30 days ===");
             LocalDateTime now = LocalDateTime.now();
-            LocalDateTime oneWeekLater = now.plusDays(7);
+            LocalDateTime oneWeekLater = now.plusDays(30);
 
             for (Event event : events) {
                 if (event.getDate().isAfter(now) && event.getDate().isBefore(oneWeekLater)) {
@@ -85,7 +85,7 @@ public class HTTPRestCLIApplication {
     private static void listEventsForUser(RegistrationClient registrationClient, long userId) {
         try {
             List<Registration> registrations = registrationClient.getAllRegistrations();
-            System.out.println("=== Events Registered by User ID: " + userId + " ===");
+            System.out.println("\n=== Events Registered by User ID: " + userId + " ===");
 
             for (Registration reg : registrations) {
                 if (reg.getUser().getId() == userId) {
@@ -108,7 +108,7 @@ public class HTTPRestCLIApplication {
                 venueMap.computeIfAbsent(venueName, k -> new ArrayList<>()).add(event);
             }
 
-            System.out.println("=== Events Grouped by Venue ===");
+            System.out.println("\n=== Events Grouped by Venue ===");
             for (Map.Entry<String, List<Event>> entry : venueMap.entrySet()) {
                 System.out.println("Venue: " + entry.getKey());
                 for (Event event : entry.getValue()) {
@@ -130,7 +130,7 @@ public class HTTPRestCLIApplication {
                 eventUserMap.computeIfAbsent(eventId, k -> new ArrayList<>()).add(reg.getUser());
             }
 
-            System.out.println("=== Users Registered per Event ===");
+            System.out.println("\n=== Users Registered per Event ===");
             for (Map.Entry<Long, List<User>> entry : eventUserMap.entrySet()) {
                 Event event = eventClient.getAllEvents().stream()
                         .filter(e -> e.getId().equals(entry.getKey()))
