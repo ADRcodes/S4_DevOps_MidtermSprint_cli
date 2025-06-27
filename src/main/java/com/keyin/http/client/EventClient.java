@@ -23,11 +23,11 @@ public class EventClient {
         this.baseUrl = serverUrl + "/api/events";
         this.client = HttpClient.newHttpClient();
         this.mapper = new ObjectMapper()
-                // 1) Register the Java 8 date/time module
+                // Register the Java 8 date/time module
                 .registerModule(new JavaTimeModule())
-                // 2) Write/read dates as ISO strings, not timestamps
+                // Write/read dates as ISO strings, not timestamps
                 .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-                // 3) Ignore any JSON props you’re not modeling
+                // Ignore any JSON props you’re not modeling
                 .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
     }
 
@@ -38,7 +38,6 @@ public class EventClient {
         this.mapper = mapper;
     }
 
-    /** GET all events */
     public List<Event> getAllEvents() throws IOException, InterruptedException {
         HttpRequest req = HttpRequest.newBuilder()
                 .uri(URI.create(baseUrl))
@@ -51,7 +50,6 @@ public class EventClient {
         return mapper.readValue(resp.body(), new TypeReference<List<Event>>() {});
     }
 
-    /** GET events by venue (query param ?venueId=) */
     public List<Event> getEventsByVenue(Long venueId) throws IOException, InterruptedException {
         String url = baseUrl + "?venueId=" + venueId;
         HttpRequest req = HttpRequest.newBuilder()
@@ -66,7 +64,6 @@ public class EventClient {
         return mapper.readValue(resp.body(), new TypeReference<List<Event>>() {});
     }
 
-    /** GET events by organizer (query param ?organizerId=) */
     public List<Event> getEventsByOrganizer(Long organizerId) throws IOException, InterruptedException {
         String url = baseUrl + "?organizerId=" + organizerId;
         HttpRequest req = HttpRequest.newBuilder()
