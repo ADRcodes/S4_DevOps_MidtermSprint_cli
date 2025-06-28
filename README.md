@@ -63,5 +63,3 @@ Follow the prompts to explore your data.
 ---
 
 ## Enjoy!
-
-This CLI is a simple way to demo your full stack, and to test your API without Postman.
