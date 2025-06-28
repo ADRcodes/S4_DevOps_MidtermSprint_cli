@@ -23,6 +23,15 @@ public class RegistrationClient {
         this.client = HttpClient.newHttpClient();
     }
 
+
+    public RegistrationClient(String serverURL, HttpClient client, ObjectMapper mapper) {
+        this.serverURL = serverURL;
+        this.client = client;
+        // mapper is not used but accepted for compatibility with existing tests
+    }
+
+
+
     public void setServerURL(String serverURL) {
         this.serverURL = serverURL;
     }
