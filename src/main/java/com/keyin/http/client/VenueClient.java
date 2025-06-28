@@ -24,6 +24,13 @@ public class VenueClient {
                 .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
     }
 
+    public VenueClient(String serverURL) {
+        this.serverURL = serverURL + "/api/venues";
+        this.client = HttpClient.newHttpClient();
+        this.mapper = new ObjectMapper()
+                .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+    }
+
     public void setServerURL(String serverURL) {
         this.serverURL = serverURL;
     }
@@ -38,7 +45,7 @@ public class VenueClient {
         List<Venue> venues = new ArrayList<>();
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(serverURL + "/api/venues"))
+                .uri(URI.create(serverURL))
                 .GET()
                 .build();
 
