@@ -10,19 +10,15 @@ public class RegistrationTest {
 
     @Test
     public void testConstructorAndGetters() {
-        // Arrange
         User user = new User(1L, "Alice", "alice@example.com");
         Event event = new Event();
         event.setId(2L);
         event.setTitle("Sample Event");
         LocalDateTime now = LocalDateTime.of(2025, 7, 1, 12, 0);
 
-        // Act
         Registration reg = new Registration(user, event, now);
-        // The constructor doesn’t set id, so set it now:
         reg.setId(3L);
 
-        // Assert
         assertEquals(3L, reg.getId());
         assertSame(user, reg.getUser(),        "User instance should match");
         assertEquals("Alice", reg.getUser().getName());
@@ -33,14 +29,11 @@ public class RegistrationTest {
 
     @Test
     public void testSetters() {
-        // Arrange
         Registration reg = new Registration();
 
-        // Act & Assert for id
         reg.setId(4L);
         assertEquals(4L, reg.getId());
 
-        // Act & Assert for user
         User user = new User();
         user.setId(5L);
         user.setName("Bob");
@@ -50,7 +43,6 @@ public class RegistrationTest {
         assertEquals("Bob", reg.getUser().getName());
         assertEquals("bob@example.com", reg.getUser().getEmail());
 
-        // Act & Assert for event
         Event event = new Event();
         event.setId(6L);
         event.setTitle("Another Event");
@@ -58,7 +50,6 @@ public class RegistrationTest {
         assertEquals(6L, reg.getEvent().getId());
         assertEquals("Another Event", reg.getEvent().getTitle());
 
-        // Act & Assert for registrationDate
         LocalDateTime dt = LocalDateTime.of(2025, 7, 2, 15, 30);
         reg.setRegistrationDate(dt);
         assertEquals(dt, reg.getRegistrationDate());
