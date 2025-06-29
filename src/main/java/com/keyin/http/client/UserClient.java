@@ -23,9 +23,7 @@ public class UserClient {
 
     // Package-private for testing
     UserClient(String serverUrl, HttpClient client, ObjectMapper mapper) {
-        this.baseUrl = serverUrl.endsWith("/")
-                ? serverUrl + "api/users"
-                : serverUrl + "/api/users";
+        this.baseUrl = serverUrl + "/api/users";
         this.client  = client;
         this.mapper  = mapper;
     }
