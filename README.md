@@ -10,6 +10,9 @@ This is a Java command-line application that consumes the REST API and allows yo
 - See who's registered for each event
 - See events grouped by venue
 
+For best results, ensure you are using the program with Java SDK 21
+
+
 ---
 
 ## How to Run
@@ -21,7 +24,7 @@ This is a Java command-line application that consumes the REST API and allows yo
 2. **Clone and navigate**
 
    ```bash
-   git clone <your-repo-url>
+   git clone https://github.com/ADRcodes/S4_DevOps_MidtermSprint_cli.git
    cd S4_DevOps_MidtermSprint_cli
    ```
 
@@ -35,6 +38,8 @@ This is a Java command-line application that consumes the REST API and allows yo
 ---
 
 ## Usage Example
+
+Prior to using the program, ensure your terminal is an appropriate size for viewing outputs.
 
 When it starts, you'll see:
 
