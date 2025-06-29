@@ -57,13 +57,7 @@ public class HTTPRestCLIApplication {
                 default -> System.out.println(" Invalid choice.");
             }
         } while (choice != 0);
-
-        // Example calls you can uncomment to test:
-         fetchAndPrintAllUsers(userClient);
-         fetchAndPrintAllEvents(eventClient);
-         fetchAndPrintEventsByVenue(eventClient, 2L);
-         fetchAndPrintEventsByOrganizer(eventClient, 1L);
-        // ─────────────────────────────────
+        scanner.close();
     }
     private static void listUpcomingEvents(EventClient eventClient) {
         try {
@@ -193,10 +187,6 @@ public class HTTPRestCLIApplication {
             e.printStackTrace();
         }
     }
-
-
-    // ─────── Registration Flows ─────────
-
 
 
     // ─────── Venue Flows ─────────
