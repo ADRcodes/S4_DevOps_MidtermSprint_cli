@@ -18,9 +18,20 @@ import java.util.List;
 public class RegistrationClient {
     private String serverURL;
     private final HttpClient client;
+    private final ObjectMapper mapper;
 
     public RegistrationClient() {
         this.client = HttpClient.newHttpClient();
+        this.mapper = new ObjectMapper()
+                .registerModule(new JavaTimeModule())
+                .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+                .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+    }
+
+    public RegistrationClient(String serverURL, HttpClient client, ObjectMapper mapper) {
+        this.serverURL = serverURL;
+        this.client = client;
+        this.mapper = mapper;
     }
 
     public void setServerURL(String serverURL) {
@@ -39,11 +50,6 @@ public class RegistrationClient {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() == 200) {
-                ObjectMapper mapper = new ObjectMapper();
-                mapper.registerModule(new JavaTimeModule());
-                mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-                mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-
                 registrations = mapper.readValue(response.body(), new TypeReference<List<Registration>>() {});
             } else {
                 System.out.println("Failed to get registrations. Status code: " + response.statusCode());
@@ -68,9 +74,6 @@ public class RegistrationClient {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() == 200) {
-                ObjectMapper mapper = new ObjectMapper();
-                mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-
                 registration = mapper.readValue(response.body(), Registration.class);
             } else {
                 System.out.println("Failed to get registration by ID. Status code: " + response.statusCode());
