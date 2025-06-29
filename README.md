@@ -40,7 +40,7 @@ When it starts, you'll see:
 
 ```
 === Event Management CLI ===
-1. What events are happening in the next 7 days?
+1. What events are happening in the next 30 days?
 2. What events is a particular attendee registered for?
 3. What events are being held at each venue?
 4. Who has registered for each event?
